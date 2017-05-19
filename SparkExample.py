@@ -27,7 +27,7 @@ def main(fileNames):
         # trackRdd = albumRecords.rdd.flatMap(extractTrack)
         trackRdd = albumRecords.rdd.flatMap(extractTrack)
         trackRdd.distinct().sortBy(lambda a: a[1]).map(lambda b: b[0]).coalesce(1).saveAsTextFile('/Users/Liang/project/Analytics2/data/tracks/'+filename_pre)
-    sparkSession.stop
+    # sparkSession.stop
 
 def extractTrack(row) :
     message = hashlib.md5()
@@ -43,19 +43,19 @@ def extractTrack(row) :
 
         for track_title in track_titles :
             track_info = artistInfo + '|' + urllib.parse.quote_plus(track_title)
-            result = []
             if genres is not None:
                 for genre in genres :
-
+                    result = []
                     rowkey = '00-01-00100_00-01-00100_'+ track_info
                     # print(rowkey)
                     message.update(rowkey.encode('utf-8'))
                     rowkey_hashed = message.hexdigest()
                     # print(rowkey_hashed)
                     result.append(rowkey_hashed)
-                    result.append(track_title)
+                    result.append(urllib.parse.quote_plus(track_title))
                     result.append(genre)
                     tuple = (','.join(result), genre)
+                    # print(tuple)
                     tracks.append(tuple)
     return tracks
 
