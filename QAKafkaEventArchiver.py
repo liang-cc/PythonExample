@@ -6,7 +6,8 @@ import kafka.errors as Errors
 
 
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format='%(asctime)s.%(msecs)03d %(levelname)s {%(module)s} [%(funcName)s] %(message)s', datefmt='%Y-%m-%d,%H:%M:%S',
+                    level=logging.INFO)
 kafka_logger = logging.getLogger('kafka')
 kafka_logger.setLevel(logging.ERROR)
 
@@ -21,25 +22,33 @@ class kafkaConsumerThread(threading.Thread) :
         self.consumer = consumer
 
 
+    # def run(self):
+    #     self.consumer.subscribe(['Events'])
+    #     while not self.shutdown_flag.is_set():
+    #         message = self.consumer.poll(max_records =1)
+    #         if any(message):
+    #             for key, records in message.items():
+    #                 for record in records :
+    #                     # print("{}".format(record.value))
+    #                     self.queue.put(record.value)
+    #         # for message in consumer:
+    #         #     print("message from kafka :{}".format(message.value))
+    #         #     self.queue.put(message.value)
+    #         #     if self.shutdown_flag.is_set():
+    #         #         print("kill signal caputured")
+    #         #         consumer.close()
+    #         #         break
+    #     print("shutting down kafka consumer thread")
+    #     logging.info("shutting down kafka consumer thread")
+
     def run(self):
         self.consumer.subscribe(['Events'])
-        while not self.shutdown_flag.is_set():
-            message = self.consumer.poll(max_records =10)
-            if any(message):
-                for key, records in message.items():
-                    for record in records :
-                        # print("{}".format(record.value))
-                        self.queue.put(record.value)
-            # for message in consumer:
-            #     print("message from kafka :{}".format(message.value))
-            #     self.queue.put(message.value)
-            #     if self.shutdown_flag.is_set():
-            #         print("kill signal caputured")
-            #         consumer.close()
-            #         break
+        for message in self.consumer :
+            self.queue.put(message.value)
+            if self.shutdown_flag.is_set():
+                break;
         print("shutting down kafka consumer thread")
-
-
+        logging.info("shutting down kafka consumer thread")
 
 class queueConsumerThread(threading.Thread) :
     def __init__( self, queue=None, group=None, target=None, name=None,
@@ -127,8 +136,8 @@ def main():
 
     try :
         consumer = KafkaConsumer(bootstrap_servers=['10.6.3.228:9092', '10.6.3.221:9092', '10.6.3.51:9092'],
-                                 group_id='event_archiver', auto_offset_reset='latest', max_poll_records=20,
-                                 request_timeout_ms=10000, session_timeout_ms=9000, consumer_timeout_ms=3000)
+                                 group_id='event_archiver_test', auto_offset_reset='earliest', max_poll_records=20,
+                                 request_timeout_ms=40000, session_timeout_ms=30000, consumer_timeout_ms=10000)
         start = time.time()
 
         p = kafkaConsumerThread(queue=q,name='producer',consumer= consumer)
