@@ -19,7 +19,7 @@ class kafkaConsumerThread(threading.Thread) :
         self.name = name
         self.queue = queue
         self.shutdown_flag = threading.Event()
-        self.consumer = consumer
+        # self.consumer = consumer
 
 
     # def run(self):
@@ -42,12 +42,16 @@ class kafkaConsumerThread(threading.Thread) :
     #     logging.info("shutting down kafka consumer thread")
 
     def run(self):
-        self.consumer.subscribe(['Events'])
-        for message in self.consumer :
+        consumer = KafkaConsumer(bootstrap_servers=['10.6.3.228:9092', '10.6.3.221:9092', '10.6.3.51:9092'],
+                                 group_id='event_archiver_test', auto_offset_reset='earliest', max_poll_records=20,
+                                 request_timeout_ms=40000, session_timeout_ms=30000, consumer_timeout_ms=10000)
+        consumer.subscribe(['Events'])
+        for message in consumer :
             self.queue.put(message.value)
             if self.shutdown_flag.is_set():
                 break;
         print("shutting down kafka consumer thread")
+        consumer.close()
         logging.info("shutting down kafka consumer thread")
 
 class queueConsumerThread(threading.Thread) :
@@ -135,12 +139,9 @@ def main():
     # consumer = KafkaConsumer(bootstrap_servers=['10.1.10.62:9092', '10.1.10.63:9092', '10.1.10.64:9092'],group_id='my-topic',auto_offset_reset='earliest')
 
     try :
-        consumer = KafkaConsumer(bootstrap_servers=['10.6.3.228:9092', '10.6.3.221:9092', '10.6.3.51:9092'],
-                                 group_id='event_archiver_test', auto_offset_reset='earliest', max_poll_records=20,
-                                 request_timeout_ms=40000, session_timeout_ms=30000, consumer_timeout_ms=10000)
         start = time.time()
 
-        p = kafkaConsumerThread(queue=q,name='producer',consumer= consumer)
+        p = kafkaConsumerThread(queue=q,name='producer')
         # every 500k record to write to a new log file
         c = queueConsumerThread(queue=q, max_record=500*1000, name='consumer')
         p.start()
@@ -161,7 +162,7 @@ def main():
         c.shutdown_flag.set()
         p.join()
         c.join()
-        consumer.close()
+
     except Errors.NoBrokersAvailable:
         logging.info("cannot connect to brokers")
         print("cannot connect to brokers")
