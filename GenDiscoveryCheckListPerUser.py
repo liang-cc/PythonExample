@@ -177,7 +177,11 @@ def loadTrackMetaFromSong(itunes_path, populiarity_dict,track_genre_dic) :
                     if track_id in track_genre_dic:
                         genre = track_genre_dic[track_id]
                         track_dic = populiarity_dict[genre]
-                        track_dic[track_id].update({'title': track_title, 'artist':artist, 'collection':album})
+                        # remove the track if any part of title, artist, album is missing
+                        if not track_title or not artist or not album:
+                            track_dic.pop(track_id, None)
+                        else:
+                            track_dic[track_id].update({'title': track_title, 'artist':artist, 'collection':album})
             except Exception:
                 print(columns)
     logger.info("{} records are read".format(counter))
@@ -202,9 +206,6 @@ def write_to_redis(populiarity_dict):
 
     # a = {"provider":"iTunes","trackId":"1262126920","genre":"Rock","title":"Rx","artist":"Theory of a Deadman","collection":"Wake Up Call"}
     # r.set(discovery_constants.redis_itunes_track_prefix+":xxxx", json.dumps(a))
-    # print(json.dumps(a))
-    # print(str(a))
-    i = 0
 
 def main():
     start_time = time.time()
@@ -249,7 +250,6 @@ def main():
     write_to_redis(populiarity_dict)
     print("--- {} seconds --- for pushing data to redis".format(time.time() - start_time))
     logger.info("--- {} seconds --- for pushing data to redis".format(time.time() - start_time))
-    i  = 0
 if __name__ == '__main__':
     start_time = time.time()
     main()
