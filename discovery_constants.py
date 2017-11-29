@@ -7,6 +7,11 @@ url = "https://feeds.itunes.apple.com/feeds/epf/v4/full/current/"
 song_url = "https://feeds.itunes.apple.com/feeds/epf/v4/full/current/{}song.tbz"
 popularity_url = "https://feeds.itunes.apple.com/feeds/epf/v4/full/current/{}song_popularity_per_genre.tbz"
 genre_url = "https://feeds.itunes.apple.com/feeds/epf/v4/full/current/{}genre.tbz"
+collection_url = "https://feeds.itunes.apple.com/feeds/epf/v4/full/current/{}collection.tbz"
+artist_url = "https://feeds.itunes.apple.com/feeds/epf/v4/full/current/{}artist.tbz"
+artist_song_url = "https://feeds.itunes.apple.com/feeds/epf/v4/full/current/{}artist_song.tbz"
+collection_song_url = "https://feeds.itunes.apple.com/feeds/epf/v4/full/current/{}collection_song.tbz"
+genre_collection_url = "https://feeds.itunes.apple.com/feeds/epf/v4/full/current/{}genre_collection.tbz"
 redis_host = "10.1.10.63"
 redis_port = 6379
 

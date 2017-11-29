@@ -33,71 +33,71 @@ def downloadTrending() :
                 result["popularity"] = link.get('href')
             else :
                 result["itunes"] = link.get('href')
-    for component in result.values() :
-        if "popularity" in component :
-            popularity_url = discovery_constants.popularity_url.format(component)
-            r = requests.get(popularity_url, stream=True, auth=(discovery_constants.username, discovery_constants.password))
-            local_filename = popularity_url.split('/')[-1]
-            with open(local_filename, "wb") as f:
-                print("Downloading %s" % local_filename )
-                logger.info("Downloading %s" % local_filename )
-                total_length = r.headers.get('content-length')
-
-                if total_length is None:  # no content length header
-                    f.write(r.content)
-                else:
-                    dl = 0
-                    total_length = int(total_length)
-                    for data in r.iter_content(chunk_size=4096*1024):
-                        dl += len(data)
-                        f.write(data)
-                        done = int(50 * dl / total_length)
-                        sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50 - done)))
-                        sys.stdout.flush()
-                    print("Download " + local_filename + " done\n")
-                    logger("Download " + local_filename + " done\n")
-        if "itunes" in component:
-            song_url = discovery_constants.song_url.format(component)
-            r = requests.get(song_url, stream=True, auth=(discovery_constants.username, discovery_constants.password))
-            local_filename = song_url.split('/')[-1]
-            with open(local_filename, "wb") as f:
-                print("Downloading %s" % local_filename)
-                logger.info("Downloading %s" % local_filename)
-                total_length = r.headers.get('content-length')
-
-                if total_length is None:  # no content length header
-                    f.write(r.content)
-                else:
-                    dl = 0
-                    total_length = int(total_length)
-                    for data in r.iter_content(chunk_size=4096*1024*10):
-                        dl += len(data)
-                        f.write(data)
-                        done = int(50 * dl / total_length)
-                        sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50 - done)))
-                        sys.stdout.flush()
-                    print("Download " + local_filename + " done\n")
-                    logger.info("Download " + local_filename + " done\n")
-            genre_url = discovery_constants.genre_url.format(component)
-            r = requests.get(genre_url, stream=True, auth=(discovery_constants.username, discovery_constants.password))
-            local_filename = genre_url.split('/')[-1]
-            with open(local_filename, "wb") as f:
-                print("Downloading %s" % local_filename)
-                logger.info("Downloading %s" % local_filename)
-                total_length = r.headers.get('content-length')
-
-                if total_length is None:  # no content length header
-                    f.write(r.content)
-                else:
-                    dl = 0
-                    total_length = int(total_length)
-                    for data in r.iter_content(chunk_size=4096*1024):
-                        dl += len(data)
-                        f.write(data)
-                        done = int(50 * dl / total_length)
-                        sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50 - done)))
-                        sys.stdout.flush()
-                    print("Download " + local_filename + " done\n")
+    # for component in result.values() :
+    #     if "popularity" in component :
+    #         popularity_url = discovery_constants.popularity_url.format(component)
+    #         r = requests.get(popularity_url, stream=True, auth=(discovery_constants.username, discovery_constants.password))
+    #         local_filename = popularity_url.split('/')[-1]
+    #         with open(local_filename, "wb") as f:
+    #             print("Downloading %s" % local_filename )
+    #             logger.info("Downloading %s" % local_filename )
+    #             total_length = r.headers.get('content-length')
+    #
+    #             if total_length is None:  # no content length header
+    #                 f.write(r.content)
+    #             else:
+    #                 dl = 0
+    #                 total_length = int(total_length)
+    #                 for data in r.iter_content(chunk_size=4096*1024):
+    #                     dl += len(data)
+    #                     f.write(data)
+    #                     done = int(50 * dl / total_length)
+    #                     sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50 - done)))
+    #                     sys.stdout.flush()
+    #                 print("Download " + local_filename + " done\n")
+    #                 logger("Download " + local_filename + " done\n")
+    #     if "itunes" in component:
+    #         song_url = discovery_constants.song_url.format(component)
+    #         r = requests.get(song_url, stream=True, auth=(discovery_constants.username, discovery_constants.password))
+    #         local_filename = song_url.split('/')[-1]
+    #         with open(local_filename, "wb") as f:
+    #             print("Downloading %s" % local_filename)
+    #             logger.info("Downloading %s" % local_filename)
+    #             total_length = r.headers.get('content-length')
+    #
+    #             if total_length is None:  # no content length header
+    #                 f.write(r.content)
+    #             else:
+    #                 dl = 0
+    #                 total_length = int(total_length)
+    #                 for data in r.iter_content(chunk_size=4096*1024*10):
+    #                     dl += len(data)
+    #                     f.write(data)
+    #                     done = int(50 * dl / total_length)
+    #                     sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50 - done)))
+    #                     sys.stdout.flush()
+    #                 print("Download " + local_filename + " done\n")
+    #                 logger.info("Download " + local_filename + " done\n")
+    #         genre_url = discovery_constants.genre_url.format(component)
+    #         r = requests.get(genre_url, stream=True, auth=(discovery_constants.username, discovery_constants.password))
+    #         local_filename = genre_url.split('/')[-1]
+    #         with open(local_filename, "wb") as f:
+    #             print("Downloading %s" % local_filename)
+    #             logger.info("Downloading %s" % local_filename)
+    #             total_length = r.headers.get('content-length')
+    #
+    #             if total_length is None:  # no content length header
+    #                 f.write(r.content)
+    #             else:
+    #                 dl = 0
+    #                 total_length = int(total_length)
+    #                 for data in r.iter_content(chunk_size=4096*1024):
+    #                     dl += len(data)
+    #                     f.write(data)
+    #                     done = int(50 * dl / total_length)
+    #                     sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50 - done)))
+    #                     sys.stdout.flush()
+    #                 print("Download " + local_filename + " done\n")
     return result
 
 def unzipFile(filename) :
@@ -345,7 +345,7 @@ def loadTrackMetaFromSong(itunes_path, populiarity_dict,track_genre_dic,collecti
                                         if artist_dict[temp_artist_id]["artist_name"] == artist:
                                             artist_id = temp_artist_id
                                             break
-                            track_dic[track_id].update({'title': track_title, 'artist':artist, 'collection':album, "collection_id": collection_id, "artist_id": artist_id})
+                            track_dic[track_id].update({'title': track_title, 'artist':artist, 'collection':album, "albumId": collection_id, "artistId": artist_id})
             except Exception:
                 print(columns)
     logger.info("{} records are read".format(counter))
@@ -380,50 +380,93 @@ def write_to_redis(populiarity_dict):
 
 def main():
     start_time = time.time()
-    # result  = downloadTrending()
-    # print("--- {} seconds --- for downloading the lastest files".format(time.time() - start_time))
-    # logger.info("--- {} seconds --- for downloading the lastest files".format(time.time() - start_time))
+    result = downloadTrending()
+    popularity_path = result["popularity"]
+    itunes_path = result["itunes"]
+    print("--- {} seconds --- for downloading the lastest files".format(time.time() - start_time))
+    logger.info("--- {} seconds --- for downloading the lastest files".format(time.time() - start_time))
+    action = sys.argv[1]
+    if action.lower() == "download" :
+        with open("./download_itunes.sh", "w") as f:
+            f.write("wget --user {} --password {} {}".format(discovery_constants.username, discovery_constants.password,
+                                                             discovery_constants.genre_url.format(
+                                                                 itunes_path)) + "\n")
+            f.write("wget --user {} --password {} {}".format(discovery_constants.username, discovery_constants.password,
+                                                             discovery_constants.popularity_url.format(
+                                                                 popularity_path)) + "\n")
+            f.write("wget --user {} --password {} {}".format(discovery_constants.username, discovery_constants.password,
+                                                             discovery_constants.genre_collection_url.format(
+                                                                 itunes_path)) + "\n")
+            f.write("wget --user {} --password {} {}".format(discovery_constants.username, discovery_constants.password, discovery_constants.artist_url.format(itunes_path))+"\n")
+            f.write("wget --user {} --password {} {}".format(discovery_constants.username, discovery_constants.password,
+                                                             discovery_constants.collection_song_url.format(
+                                                                 itunes_path)) + "\n")
+            f.write("wget --user {} --password {} {}".format(discovery_constants.username, discovery_constants.password,
+                                                             discovery_constants.artist_song_url.format(
+                                                                 itunes_path)) + "\n")
+            f.write("wget --user {} --password {} {}".format(discovery_constants.username, discovery_constants.password,
+                                                             discovery_constants.collection_url.format(
+                                                                 itunes_path)) + "\n")
+            f.write("wget --user {} --password {} {}".format(discovery_constants.username, discovery_constants.password,
+                                                             discovery_constants.song_url.format(
+                                                                 popularity_path)) + "\n")
 
-    # print("starting unzipping song_popularity_per_genre.tbz")
-    # logger.info("starting unzipping song_popularity_per_genre.tbz")
-    # start_time = time.time()
-    # print(unzipFile("./song_popularity_per_genre.tbz"))
-    # print("--- {} seconds --- for unzipping song_popularity_per_genre.tbz".format(time.time() - start_time))
-    # logger.info("--- {} seconds --- for unzipping song_popularity_per_genre.tbz".format(time.time() - start_time))
-    #
-    # print("starting unzipping genre.tbz")
-    # logger.info("starting unzipping genre.tbz")
-    # start_time = time.time()
-    # print(unzipFile("./genre.tbz"))
-    # print("--- {} seconds --- for unzipping genre.tbz".format(time.time() - start_time))
-    # logger.info("--- {} seconds --- for unzipping genre.tbz".format(time.time() - start_time))
-    #
-    # print("starting unzipping song.tbz")
-    # logger.info("starting unzipping song.tbz")
-    # start_time = time.time()
-    # print(unzipFile("./song.tbz"))
-    # print("--- {} seconds --- for unzipping song.tbz".format(time.time() - start_time))
-    # logger.info("--- {} seconds --- for unzipping song.tbz".format(time.time() - start_time))
+
+            f.write("tar -xjf genre.tbz\n")
+            f.write("tar -xjf song_popularity_per_genre.tbz\n")
+            f.write("tar -xjf genre_collection.tbz\n")
+            f.write("tar -xjf artist.tbz\n")
+            f.write("tar -xjf collection_song.tbz\n")
+            f.write("tar -xjf artist_song.tbz\n")
+            f.write("tar -xjf collection.tbz\n")
+            f.write("tar -xjf song.tbz\n")
+        cmd = ['chmod', '777', "./download_itunes.sh"]
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        for line in p.stdout:
+            print(line)
+        p.wait()
+        print(p.returncode)
+    elif action.lower() == "gen":
+        # print("starting unzipping song_popularity_per_genre.tbz")
+        # logger.info("starting unzipping song_popularity_per_genre.tbz")
+        # start_time = time.time()
+        # print(unzipFile("./song_popularity_per_genre.tbz"))
+        # print("--- {} seconds --- for unzipping song_popularity_per_genre.tbz".format(time.time() - start_time))
+        # logger.info("--- {} seconds --- for unzipping song_popularity_per_genre.tbz".format(time.time() - start_time))
+        #
+        # print("starting unzipping genre.tbz")
+        # logger.info("starting unzipping genre.tbz")
+        # start_time = time.time()
+        # print(unzipFile("./genre.tbz"))
+        # print("--- {} seconds --- for unzipping genre.tbz".format(time.time() - start_time))
+        # logger.info("--- {} seconds --- for unzipping genre.tbz".format(time.time() - start_time))
+        #
+        # print("starting unzipping song.tbz")
+        # logger.info("starting unzipping song.tbz")
+        # start_time = time.time()
+        # print(unzipFile("./song.tbz"))
+        # print("--- {} seconds --- for unzipping song.tbz".format(time.time() - start_time))
+        # logger.info("--- {} seconds --- for unzipping song.tbz".format(time.time() - start_time))
 
 
-    # # {genre:{trackid:{trackinfo}}}
-    print("parsing data:")
-    logger.info("parsing data")
-    populiarity_dict = loadTrendingData(discovery_constants.result)
+        # # {genre:{trackid:{trackinfo}}}
+        print("parsing data:")
+        logger.info("parsing data")
+        populiarity_dict = loadTrendingData(discovery_constants.result)
 
-    print("pushing data to redis")
-    logger.info("pushing data to redis")
-    start_time = time.time()
-    write_to_redis(populiarity_dict)
-    print("--- {} seconds --- for pushing data to redis".format(time.time() - start_time))
-    logger.info("--- {} seconds --- for pushing data to redis".format(time.time() - start_time))
+        print("pushing data to redis")
+        logger.info("pushing data to redis")
+        start_time = time.time()
+        write_to_redis(populiarity_dict)
+        print("--- {} seconds --- for pushing data to redis".format(time.time() - start_time))
+        logger.info("--- {} seconds --- for pushing data to redis".format(time.time() - start_time))
 
-    # print("writting data to json")
-    # logger.info("writting data to json")
-    # start_time = time.time()
-    # write_treading_to_json(populiarity_dict)
-    # print("--- {} seconds --- for writting data to json".format(time.time() - start_time))
-    # logger.info("--- {} seconds --- writting data to json".format(time.time() - start_time))
+        # print("writting data to json")
+        # logger.info("writting data to json")
+        # start_time = time.time()
+        # write_treading_to_json(populiarity_dict)
+        # print("--- {} seconds --- for writting data to json".format(time.time() - start_time))
+        # logger.info("--- {} seconds --- writting data to json".format(time.time() - start_time))
 
 
 if __name__ == '__main__':
